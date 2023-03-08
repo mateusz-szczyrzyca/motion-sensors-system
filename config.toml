@@ -1,0 +1,31 @@
+# main loop delay
+main_loop_time_milisecs = 1
+
+# sensors configuration, 
+motion_sensors_list = [
+    { name = "Sensor19", pin_number = 19, refresh_rate_milisecs = 250, motion_time_period_milisecs = 1200, minimal_triggering_number = 4},
+    { name = "Sensor12", pin_number = 12, refresh_rate_milisecs = 250, motion_time_period_milisecs = 1200, minimal_triggering_number = 2},
+    { name = "SensorFast20", pin_number = 20, refresh_rate_milisecs = 200, motion_time_period_milisecs = 1200, minimal_triggering_number = 2},
+    { name = "Sensor21", pin_number = 21, refresh_rate_milisecs = 250, motion_time_period_milisecs = 1500, minimal_triggering_number = 4},
+    { name = "Sensor16", pin_number = 16, refresh_rate_milisecs = 250, motion_time_period_milisecs = 1200, minimal_triggering_number = 4},
+    { name = "Sensor13", pin_number = 13, refresh_rate_milisecs = 250, motion_time_period_milisecs = 1200, minimal_triggering_number = 4},
+    { name = "Sensor26", pin_number = 26, refresh_rate_milisecs = 100, motion_time_period_milisecs = 1500, minimal_triggering_number = 5},
+    { name = "Sensor6", pin_number = 6, refresh_rate_milisecs = 250, motion_time_period_milisecs = 2000, minimal_triggering_number = 4},
+    { name = "Sensor5", pin_number = 5, refresh_rate_milisecs = 100, motion_time_period_milisecs = 1000, minimal_triggering_number = 5},
+    { name = "Sensor25", pin_number = 25, refresh_rate_milisecs = 200, motion_time_period_milisecs = 1000, minimal_triggering_number = 4},
+    ]
+
+# true/false => if `false` only sensor name is displayed in the log, `true` displays also it's parameters
+motion_sensor_detail_info = true
+
+config_reload_time_secs = 20
+config_reload_notify = true
+
+detection_report = false
+detection_report_period_secs = 30
+# 0 here means: disabled
+no_detection_report_period_secs = 1200
+
+basedir = "state"
+reload_file = "reload"
+
