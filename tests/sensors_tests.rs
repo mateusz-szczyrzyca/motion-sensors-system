@@ -10,8 +10,6 @@ mod tests {
         logic::main_loop::{main_loop, TestData},
         states::mode::Mode,
     };
-    use pir_motion_sensor::sensor::config::SensorConfig;
-    use pir_motion_sensor::sensor::motion::MotionSensor;
     use std::{
         sync::mpsc::{self, Receiver, SyncSender},
         time::SystemTime,
