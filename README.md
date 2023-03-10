@@ -1,4 +1,4 @@
-## motion-sensors-system
+## motion-sensors-system [IN PROGRESS]
 
 **WARNING: this app hasn't been finished yet - if you have a plan to use it please wait till it's finished - it should take no more than 3 months in the worst case scenario.**
 
@@ -11,6 +11,7 @@ It sends/receives events from other applications from this system (eg. presence 
 
 Python prototype of this app is already used at my family's house as smart alarm with automatic person detection, this is 
 rewrite from scratch in Rust due to much better performance and resource usage. The prototype is running on Raspberry Pi 4 with 4GB RAM and generally does what is suppose to do, but causes significant load on Raspberry.
+
 &nbsp;
 ## TODO
 - [ ] MQTT green thread to receive events from other systems/sensors
@@ -29,4 +30,4 @@ rewrite from scratch in Rust due to much better performance and resource usage. 
   Presence detector code also will be published soon.
 
 - Various reactions to motion detection such as turning on/off lights, opening garage doors, turn on/off heating systems, etc. 
-  There are no limits in such use cases so if you want to use Rust on your Raspberry this app should be a good choice.
+  There are no limits in such use cases so if you want to use Rust on your Raspberry this app should be a good choice for such use cases.
