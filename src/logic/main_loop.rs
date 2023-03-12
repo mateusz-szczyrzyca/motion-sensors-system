@@ -61,11 +61,11 @@ pub fn main_loop(
         let mut detector_times_list: Vec<SystemTime> = Vec::new();
         let mut detector_report_count: AHashMap<String, u32> = AHashMap::new();
 
-        let sl = Soloud::default().unwrap();
-        let mut end_tone = audio::Wav::default();
-        end_tone
-            .load(&std::path::Path::new("/home/pi/wav/short-click.wav"))
-            .unwrap();
+        // let sl = Soloud::default().unwrap();
+        // let mut end_tone = audio::Wav::default();
+        // end_tone
+        //     .load(&std::path::Path::new("/home/pi/wav/short-click.wav"))
+        //     .unwrap();
 
         loop {
             no_detection = true;
@@ -149,7 +149,7 @@ pub fn main_loop(
                 // Possible func: LogInstantDetections(detection, sensor_name, sensor_time)
 
                 if detection {
-                    sl.play(&end_tone);
+                    // sl.play(&end_tone);
                     info!(
                         "Detection, sensor: {}, time: {:?}",
                         sensor_name, sensor_detection_time
