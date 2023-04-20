@@ -13,13 +13,15 @@ motion_sensors_list = [
     { name = "Sensor6", pin_number = 6, refresh_rate_milisecs = 250, motion_time_period_milisecs = 2000, minimal_triggering_number = 4},
     { name = "Sensor5", pin_number = 5, refresh_rate_milisecs = 100, motion_time_period_milisecs = 1000, minimal_triggering_number = 5},
     { name = "Sensor25", pin_number = 25, refresh_rate_milisecs = 200, motion_time_period_milisecs = 1000, minimal_triggering_number = 4},
+    { name = "Sensor23", pin_number = 23, refresh_rate_milisecs = 200, motion_time_period_milisecs = 1000, minimal_triggering_number = 4},
+    { name = "Sensor24", pin_number = 24, refresh_rate_milisecs = 200, motion_time_period_milisecs = 1000, minimal_triggering_number = 4},
     ]
 
 # true/false => if `false` only sensor name is displayed in the log, `true` displays also it's parameters
 motion_sensor_detail_info = true
 
-config_reload_time_secs = 20
-config_reload_notify = true
+config_reload_time_secs = 60
+config_reload_notify = false
 
 detection_report = false
 detection_report_period_secs = 30

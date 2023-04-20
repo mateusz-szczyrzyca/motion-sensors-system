@@ -13,6 +13,7 @@ serde = { version = "1.0.144", features = ["derive"] }
 toml = "0.5.10"
 soloud = { git = "https://github.com/moalyousef/soloud-rs" }
 rodio = "0.16.0"
-tokio = { version = "1.23.0", features = ["full"]}
+tokio = { version = "1.27.0", features = ["full"]}
 log4rs = "1.2.0"
-pir-motion-sensor = "0.1.2"
+pir-motion-sensor = "2.0.0"
+tokio-util = "0.7.7"

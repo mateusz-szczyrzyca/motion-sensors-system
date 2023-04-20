@@ -6,7 +6,7 @@ use pir_motion_sensor::sensor::config::SensorConfig;
 
 pub const CONFIG_FILENAME: &str = "config.toml";
 pub const STOP_LOOP_COUNT_MAX: u64 = 10;
-pub const MOTION_SENSORS_CHANNEL_DEPTH: usize = 100;
+pub const MOTION_SENSORS_CHANNEL_DEPTH: usize = 10;
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct ConfigStruct {

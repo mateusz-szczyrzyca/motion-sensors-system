@@ -1,18 +1,20 @@
+use chrono::DateTime;
 use chrono::Local;
 use env_logger::Builder;
-use log::{info, warn, LevelFilter};
+use log::{info, LevelFilter};
 use motion_sensors_system::config::settings::{
     read_config, ConfigStruct, MOTION_SENSORS_CHANNEL_DEPTH,
 };
-use motion_sensors_system::logic::main_loop::main_loop;
+use pir_motion_sensor::sensor::helpers::spawn_detection_threads;
+use tokio_util::sync::CancellationToken;
 use pir_motion_sensor::sensor::motion::MotionSensor;
 // use soloud::*;
 use std::io::Write;
-use std::sync::mpsc::Sender;
-use std::{
-    sync::mpsc::{self, Receiver, SyncSender},
-    time::SystemTime,
-};
+use std::sync::Arc;
+use std::time::Duration;
+use std::time::SystemTime;
+use tokio::sync::mpsc::{Receiver, Sender};
+use tokio::sync::{mpsc, Mutex};
 
 mod config;
 mod logic;
@@ -33,18 +35,16 @@ async fn main() {
         .filter(None, LevelFilter::Info)
         .init();
 
-    let mut stop_commands_list_channels: Vec<Sender<bool>> = Vec::new();
-    let mut sensors_list = State::default();
-
     loop {
         info!("starting main...");
 
         let sensors_inititialized = false;
+        // channel for sensor data
         #[allow(clippy::type_complexity)]
-        let (channel_to_send, channel_to_receive): (
-            SyncSender<(String, SystemTime)>,
+        let (detections_channel_sender, mut detections_channel_receiver): (
+            Sender<(String, SystemTime)>,
             Receiver<(String, SystemTime)>,
-        ) = mpsc::sync_channel(MOTION_SENSORS_CHANNEL_DEPTH);
+        ) = mpsc::channel(MOTION_SENSORS_CHANNEL_DEPTH);
 
         info!("communication channel created");
 
@@ -56,58 +56,53 @@ async fn main() {
             info!("this is not first reload");
         }
 
+        let mut sensors = Vec::new();
+
         configuration
             .clone()
             .motion_sensors_list
             .into_iter()
             .for_each(|sensor| {
-                let mut s = MotionSensor::new(
+                let s = MotionSensor::new(
                     sensor.name,
                     sensor.pin_number,
                     sensor.refresh_rate_milisecs,
                     sensor.motion_time_period_milisecs,
                     sensor.minimal_triggering_number,
-                    channel_to_send.clone(),
+                    detections_channel_sender.clone(),
                     None,
                 );
-                sensors_list.add_to_list(s.clone());
 
-                let (sender, receiver) = mpsc::channel();
-
-                tokio::task::spawn_blocking(move || {
-                    s.start_detector(receiver);
-                });
-                stop_commands_list_channels.push(sender);
+                sensors.push(Arc::new(Mutex::new(s)))
             });
 
-        let test_data = Vec::new();
+        // cancellation token which can be later used to stop sensors threads
+        let token = CancellationToken::new();
 
-        // long running main loop: receive detections from sensors via channel and process them accordingly
-        // if the loops stops then we "reload" sensors and start it again
-        main_loop(configuration.clone(), channel_to_receive, test_data, None);
+        // helper function to run important threads (via tokio::spawn)
+        // you don't have deal this is you don't want to - just leave it as it is
+        spawn_detection_threads(sensors, token.clone());
 
-        for c in &stop_commands_list_channels {
-            warn!("stop commands sending...");
-            c.send(true).unwrap();
+        //
+        // main loop: here we put logic to handle valid detections, place your code here
+        //
+        loop {
+            if let Ok(detection_message) = detections_channel_receiver.try_recv() {
+                // valid detection received
+                // each "valid" detection contains the sensor name and time of detection as SystemTime
+                let (detection_name, detection_time) = detection_message;
+
+                let human_time_pre: DateTime<Local> = detection_time.into();
+                let human_time_final = human_time_pre.format("[%Y-%m-%d %H:%M:%S]");
+
+                println!("{human_time_final}: {detection_name}");
+                //
+                // put your action here like alarm or turn on/off light
+                // to interact with rest GPIOs you can check rppal lib examples here: https://github.com/golemparts/rppal/tree/master/examples
+                //
+            }
+            tokio::time::sleep(Duration::from_millis(1)).await;
         }
-
         // end outer loop
-    }
-}
-
-pub struct State {
-    list_sensors: Vec<MotionSensor>,
-}
-
-impl Default for State {
-    fn default() -> Self {
-        let list_sensors: Vec<MotionSensor> = Vec::new();
-        Self { list_sensors }
-    }
-}
-
-impl State {
-    fn add_to_list(&mut self, sensor: MotionSensor) {
-        self.list_sensors.push(sensor);
     }
 }
