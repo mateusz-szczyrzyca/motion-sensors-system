@@ -1,6 +1,6 @@
 ## motion-sensors-system [IN PROGRESS]
 
-**WARNING: this app hasn't been finished yet - if you have a plan to use it please wait till it's finished - it should take no more than 3 months in the worst case scenario.**
+**WARNING: this app hasn't been finished yet - if you have a plan to use it please wait till it's finished.
 
 &nbsp;
 ## What's this
